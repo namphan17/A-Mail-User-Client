@@ -53,7 +53,7 @@ public class Envelope {
 	String escapedBody = "";
 	String token;
 	StringTokenizer parser = new StringTokenizer(message.Body, "\n", true);
-
+	
 	while(parser.hasMoreTokens()) {
 	    token = parser.nextToken();
 	    if(token.startsWith(".")) {

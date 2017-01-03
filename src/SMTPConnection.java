@@ -40,7 +40,7 @@ public class SMTPConnection {
 	/* SMTP handshake. We need the name of the local machine.
 	   Send the appropriate SMTP handshake command. */
 	String localhost = "gmail.com";
-	sendCommand("HELO " + localhost, 250);
+	sendCommand("HELO " + localhost + CRLF, 250);
 
 	isConnected = true;
     }
@@ -61,15 +61,16 @@ public class SMTPConnection {
 		String actualMessage = envelope.Message.Body;
 		
 		// Sending MAIL FROM command
-		sendCommand("MAIL FROM: <" + sender + ">", 250);
+		sendCommand("MAIL FROM: <" + sender + ">" + CRLF, 250);
 		// Sending RCPT TO command
-		sendCommand("RCPT TO: <" + recipient + ">", 250);
+		sendCommand("RCPT TO: <" + recipient + ">" + CRLF, 250);
 		// Sending DATA command
-		sendCommand("DATA", 354);
+		sendCommand("DATA" + CRLF, 354);
 		// Sending the message
-		sendCommand(actualMessage, 250);
+		sendCommand(actualMessage + CRLF + "." + CRLF, 250);
 		
 		/* Fill in */
+		close();
 	}
 
 	/*
@@ -79,8 +80,8 @@ public class SMTPConnection {
 	public void close() {
 		isConnected = false;
 		try {
-			sendCommand("QUIT", 221);
-			// connection.close();
+			sendCommand("QUIT" + CRLF, 221);
+			connection.close();
 		} catch (IOException e) {
 			System.out.println("Unable to close connection: " + e);
 			isConnected = true;
@@ -98,7 +99,7 @@ public class SMTPConnection {
 		/*
 		 * Check that the server's reply code is the same as the parameter rc.
 		 * If not, throw an IOException.
-		/* Fill in */
+		 * */
 		String reply = fromServer.readLine();
 		if (parseReply(reply) != rc) {
 			throw new IOException();
@@ -119,4 +120,4 @@ public class SMTPConnection {
 		}
 		super.finalize();
 	}
-}
+} // Class
