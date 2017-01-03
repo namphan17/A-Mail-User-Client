@@ -4,6 +4,8 @@ import java.util.*;
 
 /**
  * Open an SMTP connection to a mailserver and send one mail.
+ * 
+ * @author Nam Phan
  *
  */
 public class SMTPConnection {
@@ -23,9 +25,10 @@ public class SMTPConnection {
     /* Create an SMTPConnection object. Create the socket and the 
        associated streams. Initialize SMTP connection. */
     public SMTPConnection(Envelope envelope) throws IOException {
-	// connection = /* Fill in */;
-	fromServer = /* Fill in */;
-	toServer =   /* Fill in */;
+	
+    connection = new Socket("74.125.193.26", SMTP_PORT);
+	fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	toServer =  new DataOutputStream(connection.getOutputStream());
 	
 	/* Fill in */
 	/* Read a line from server and check that the reply code is 220.
@@ -80,6 +83,8 @@ public class SMTPConnection {
     /* Parse the reply line from the server. Returns the reply code. */
     private int parseReply(String reply) {
 	/* Fill in */
+    	StringTokenizer tokens = new StringTokenizer(reply);
+    	return Integer.parseInt(tokens.nextToken());
     }
 
     /* Destructor. Closes the connection if something bad happens. */
